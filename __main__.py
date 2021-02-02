@@ -1,6 +1,7 @@
 from Board import Board
 from Snake import Snake
 from Interface import Interface
+from time import sleep
 
 import threading
 
@@ -9,8 +10,14 @@ snake = Snake(board)
 interface = Interface(board, snake)
 
 def gameFunction():
-    while snake.move():
-        interface.update()
+    while not interface.windowClosed:
+        snakeAlive = snake.move()
+
+        if not snakeAlive:
+            break
+
+        interface.draw()
+        sleep(0.1)
 
 gameThread = threading.Thread(target = gameFunction)
 gameThread.start()

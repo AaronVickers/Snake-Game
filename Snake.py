@@ -3,7 +3,7 @@ from Heading import Heading
 
 from collections import deque
 
-defaultSnake = [Point(0, 0), Point(1, 0)]
+defaultSnake = [Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0)]
 defaultHeading = Heading.EAST
 
 class Snake():
@@ -11,6 +11,7 @@ class Snake():
     def __init__(self, board, snake = defaultSnake, heading = defaultHeading):
         self.board = board
         self.snake = deque(snake)
+        self.lastHeading = heading
         self.heading = heading
         self.dead = False
         self.growCount = 0
@@ -53,6 +54,7 @@ class Snake():
             return False
         
         self.snake.append(newFront)
+        self.lastHeading = self.heading
 
         if self.checkCollision():
             self.dead = True
@@ -65,6 +67,13 @@ class Snake():
         self.growCount += increment
 
     def setHeading(self, heading):
+        lastAndNewHeadings = {self.lastHeading, heading}
+
+        if Heading.NORTH in lastAndNewHeadings and Heading.SOUTH in lastAndNewHeadings:
+            return
+        elif Heading.EAST in lastAndNewHeadings and Heading.WEST in lastAndNewHeadings:
+            return
+        
         self.heading = heading
     
     def getPositions(self):
